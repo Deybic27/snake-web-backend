@@ -19,8 +19,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'username',
         'email',
         'password',
+        'score'
     ];
 
     /**
@@ -44,5 +46,27 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    /**
+     * Get the game sessions for the user.
+     */
+    public function gameSessions()
+    {
+        return $this->hasMany(GameSessions::class);
+    }
+
+    /**
+     * Get the games for the user.
+     */
+    public function games()
+    {
+        return $this->hasManyThrough(
+            Game::class, // Final model
+            GameSessions::class, // Intermediate model
+            'user_id', // Foreign key on GameSessions table
+            'id', // Foreign key on Games table
+            'id', // Local key on Users table
+            'game_id' // Local key on GameSessions table
+        );
     }
 }
