@@ -6,11 +6,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\GameSessions;
+use App\Models\Game;
+use App\Models\UserStats;
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -21,8 +25,7 @@ class User extends Authenticatable
         'name',
         'username',
         'email',
-        'password',
-        'score'
+        'password'
     ];
 
     /**
@@ -52,7 +55,7 @@ class User extends Authenticatable
      */
     public function gameSessions()
     {
-        return $this->hasMany(GameSessions::class);
+        return $this->hasMany(GameSession::class);
     }
 
     /**
@@ -62,11 +65,19 @@ class User extends Authenticatable
     {
         return $this->hasManyThrough(
             Game::class, // Final model
-            GameSessions::class, // Intermediate model
-            'user_id', // Foreign key on GameSessions table
+            GameSession::class, // Intermediate model
+            'user_id', // Foreign key on GameSession table
             'id', // Foreign key on Games table
             'id', // Local key on Users table
-            'game_id' // Local key on GameSessions table
+            'game_id' // Local key on GameSession table
         );
+    }
+
+    /**
+     * Get the user stats for the user.
+     */
+    public function userStats()
+    {
+        return $this->hasMany(UserStats::class);
     }
 }

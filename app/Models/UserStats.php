@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Notifications\Notifiable;
 use App\Models\User;
-use App\Models\Game;
 
-class GameSession extends Model
+class UserStats extends Model
 {
-    use HasFactory;
+    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -19,23 +20,22 @@ class GameSession extends Model
     protected $fillable = [
         'user_id',
         'game_id',
-        'completed',
-        'score',
-        'duration_seconds',
-        'started_at',
-        'ended_at'
+        'total_score',
+        'high_score',
+        'total_sessions',
+        'total_time_played',
     ];
 
     /**
-     * Get the user that owns the game session.
+     * Get the user that owns the stats.
      */
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    
+
     /**
-     * Get the game that owns the game session.
+     * Get the game that owns the stats.
      */
     public function game()
     {
