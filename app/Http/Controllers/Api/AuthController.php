@@ -17,6 +17,11 @@ class AuthController extends Controller
             'username' => 'required|string|min:1|max:30|unique:users,username|regex:/^[a-z0-9._]+$/',
             'email' => 'required|string|email|max:255|unique:users,email',
             'password' => 'required|string|min:8|max:100|confirmed',
+        ],
+        [
+            'username.regex' => 'The username may only contain letters, numbers, dots and underscores.',
+            'username.unique' => 'User already exist.',
+            'email.unique' => 'Email already exist.',
         ]);
 
         // Create user
